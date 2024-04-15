@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tax Calculator</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    /* Add custom styles here */
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <h1 class="mb-4">Tax Calculator</h1>
+  <form id="taxForm">
+    <div class="form-group">
+      <label for="income">Gross Annual Income:</label>
+      <input type="number" class="form-control" id="income" required>
+      <div class="invalid-feedback">Please enter a valid income.</div>
+    </div>
+    <div class="form-group">
+      <label for="extraIncome">Extra Income:</label>
+      <input type="number" class="form-control" id="extraIncome">
+      <div class="invalid-feedback">Please enter a valid extra income.</div>
+    </div>
+    <div class="form-group">
+      <label for="deductions">Deductions:</label>
+      <input type="number" class="form-control" id="deductions">
+      <div class="invalid-feedback">Please enter valid deductions.</div>
+    </div>
+    <div class="form-group">
+      <label for="age">Age:</label>
+      <select class="form-control" id="age" required>
+        <option value="<40">&lt; 40</option>
+        <option value="≥40 & <60">≥ 40 &lt; 60</option>
+        <option value="≥60">≥ 60</option>
+      </select>
+      <div class="invalid-feedback">Please select an age group.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Custom JavaScript -->
+<script>
+  // JavaScript code here
+  document.getElementById('taxForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // Fetch input values
+    const income = parseFloat(document.getElementById('income').value);
+    const extraIncome = parseFloat(document.getElementById('extraIncome').value) || 0;
+    const deductions = parseFloat(document.getElementById('deductions').value) || 0;
+    const age = document.getElementById('age').value;
+
+    // Perform tax calculation based on provided formula
+    let tax = 0;
+    if (income + extraIncome - deductions > 800000) {
+      if (age === '<40') {
+        tax = 0.3 * (income + extraIncome - deductions - 800000);
+      } else if (age === '≥40 & <60') {
+        tax = 0.4 * (income + extraIncome - deductions - 800000);
+      } else if (age === '≥60') {
+        tax = 0.1 * (income + extraIncome - deductions - 800000);
+      }
+    }
+
+    // Display results in a modal
+    const modalBody = document.querySelector('.modal-body');
+    modalBody.innerHTML = `<p>Tax calculated:</p><p>${tax} Lakhs</p>`;
+    $('#resultModal').modal('show');
+  });
+</script>
+
+
+<!-- Modal for displaying results -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resultModalLabel">Tax Calculation Results</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Display calculated tax results here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
